@@ -4,7 +4,7 @@ import { galleryItems } from './gallery-items.js';
 console.log(galleryItems);
 
 // Створення розмітки на підставі масиву даних galleryItems і наданого шаблону елемента галереї.
-function CreateGalleryItemsMarkup(gallery) {
+function CreateGalleryItemsMarkup() {
   return galleryItems
     .map(({ preview, original, description }) => {
       return ` <div class="gallery__item"><a class="gallery__link" href="${original}">
@@ -12,12 +12,10 @@ function CreateGalleryItemsMarkup(gallery) {
     })
     .join('');
 }
-console.log(CreateGalleryItemsMarkup(galleryItems));
 
-// Рендеремо розмітку на сторінку
+// Рендеремо розмітку галерії
 
 const galleryContainer = document.querySelector('.gallery');
-
 const galleryItemsMarkup = CreateGalleryItemsMarkup(galleryItems);
 
 galleryContainer.insertAdjacentHTML('beforeend', galleryItemsMarkup);
@@ -26,22 +24,25 @@ galleryContainer.insertAdjacentHTML('beforeend', galleryItemsMarkup);
 
 galleryContainer.addEventListener('click', onClickItem);
 
-
 function onClickItem(e) {
-   e.preventDefault();
-   const isPictureItem = e.target.classList.contains('gallery__image');
-   if (!isPictureItem) {
-      return;
-   }
-   const originalImage = basicLightbox.create(`
+  e.preventDefault();
+  const isPictureItem = e.target.classList.contains('gallery__image');
+  if (!isPictureItem) {
+    return;
+  }
+
+  // Ініціалізація бібліотеку SimpleLightbox
+   
+  const originalImage = basicLightbox.create(`
         <img src="${e.target.dataset.source}" alt="${e.target.alt}" width="800" height="600"/>
 `);
    originalImage.show();
    
-   document.addEventListener('keydown', function ({code}) {
-      if (code === 'Escape')
-        originalImage.close(); 
-   });
+   // Закриття модального вікна кнопкою Escape
+
+  document.addEventListener('keydown', function ({ code }) {
+    if (code === 'Escape') originalImage.close();
+  });
 };
 
 
